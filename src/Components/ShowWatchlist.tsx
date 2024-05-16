@@ -33,7 +33,7 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
   async function getItems() {
     try {
       const response = await fetch(
-        `http://localhost:5000/getItems/${user._id}/${name}`
+        `https://tradingbackend-2w6s.onrender.com/getItems/${user._id}/${name}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch watchlist");
@@ -49,7 +49,7 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
   async function RemoveItem(symbol: string) {
     try {
       let result = await fetch(
-        `http://localhost:5000/removeItem/${user._id}/${name}/${symbol}`,
+        `https://tradingbackend-2w6s.onrender.com/removeItem/${user._id}/${name}/${symbol}`,
         {
           method: "DELETE",
           headers: {
