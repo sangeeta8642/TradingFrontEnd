@@ -16,7 +16,7 @@ export default function Home() {
   
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/GettingAllstocks");
+      const response = await fetch("https://tradingbackend-2w6s.onrender.com/GettingAllstocks");
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
