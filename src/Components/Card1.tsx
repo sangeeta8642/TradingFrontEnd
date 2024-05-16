@@ -48,7 +48,7 @@ export default function Card1({ data,getData }: Card1Props) {
   async function getWatchlist() {
     try {
       const response = await fetch(
-        `http://localhost:5000/getWatchlists/${user._id}`
+        `https://tradingbackend-2w6s.onrender.com/getWatchlists/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch watchlist");
@@ -63,7 +63,7 @@ export default function Card1({ data,getData }: Card1Props) {
   console.log(company[0],watchlistname);
 
 async function addItem() {
-  let result=await fetch(`http://localhost:5000/addItemToInnerArray/${user._id}/${watchlistname}`,{
+  let result=await fetch(`https://tradingbackend-2w6s.onrender.com/addItemToInnerArray/${user._id}/${watchlistname}`,{
     method:"POST",
     headers:{
       "content-type":"application/json"
