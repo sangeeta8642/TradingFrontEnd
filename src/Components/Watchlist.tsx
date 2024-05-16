@@ -181,7 +181,10 @@ export default function Watchlist() {
             </>
           ) : null}
         </div>
-        <Button variant="contained" color="success" onClick={removeWatchlist} >Remove {name}</Button>
+        {
+          name!==""?<><Button variant="contained" color="success" onClick={removeWatchlist} >Remove {name}</Button></>:null
+        }
+        
         <div className="watchlist-cards">
           <ShowWatchlist items={items} name={name} onRemoveItem={RemoveItemFromState} />
         </div>

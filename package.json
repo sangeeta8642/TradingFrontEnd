@@ -16,8 +16,10 @@
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "axios": "^1.6.8",
+    "plotly.js": "^2.32.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.11.0",
@@ -47,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-plotly.js": "^2.6.3"
   }
 }

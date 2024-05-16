@@ -1,4 +1,4 @@
-// Card1.tsx
+// Card1.tsx sun npm start kr 
 import * as React from "react";
 import { useState } from "react";
 import "../CSS/Card1.css";
@@ -9,7 +9,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import StockData from "./Stock"; // Import StockData interface
+import StockData from "./Stock";
+import Plot from "react-plotly.js";
 
 
 import ibm from "../images/ibm.png";
@@ -26,12 +27,31 @@ interface watchlistinterface {
 interface TimeSeriesData {
   [key: string]: {
     '1. open': string;
-    // Add other properties as needed
+    "2. high":string;
+    "3. low":string
+    "4. close":string
+    "5. volume":string
   };
 }
 
+interface MetaData {
+  "1. Information": string,
+  "2. Symbol": string,
+  "3. Last Refreshed": any,
+  "4. Output Size": string,
+  "5. Time Zone": string
+}
+
+const initialState: MetaData = {
+  "1. Information": "",
+  "2. Symbol": "",
+  "3. Last Refreshed": null,
+  "4. Output Size": "",
+  "5. Time Zone": ""
+};
+
 interface Card1Props {
-  data: StockData[]; // Use StockData[] as the type for the data prop
+  data: StockData[];
   getData:()=>void
 }
 export default function Card1({ data,getData }: Card1Props) {
@@ -48,6 +68,7 @@ export default function Card1({ data,getData }: Card1Props) {
   const [plotData, setplotData] = useState<any>(null);
   const [stockXvalues, setStockXValues] = useState<string[]>([]);
   const [stockYvalues, setStockYValues] = useState<string[]>([]);
+  const [apicompany, setapicompany] = useState<MetaData>(initialState); 
 
   React.useEffect(() => {
     getWatchlist();
@@ -57,16 +78,17 @@ export default function Card1({ data,getData }: Card1Props) {
   async function PlotGraph(symbol:String){
     try {
       let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
-      result=await result.json()
-      console.log(result);
       if (!result.ok) {
         throw new Error('Error fetching data');
       }
       const responseData = await result.json();
-      setplotData(responseData);
       console.log(responseData);
-      console.log(responseData['Meta Data']); // Check if this prints correctly
-      console.log(responseData['Time Series (Daily)']); // Check if this prints correctly
+      setplotData(responseData);
+      console.log("responseData ++++++++");
+      console.log(responseData['Meta Data']); 
+      console.log("responseData -------");
+      console.log(responseData['Time Series (Daily)']);
+      setapicompany(responseData['Meta Data'])
 
       // Loop through the daily time series data and extract values
       const timeSeriesData: TimeSeriesData = responseData['Time Series (Daily)'];
@@ -111,6 +133,9 @@ export default function Card1({ data,getData }: Card1Props) {
   console.log(company[0],watchlistname);
 
 async function addItem() {
+  try{
+
+ 
   let result=await fetch(`https://tradingbackend-2w6s.onrender.com/addItemToInnerArray/${user._id}/${watchlistname}`,{
     method:"POST",
     headers:{
@@ -118,6 +143,7 @@ async function addItem() {
     },
     body:JSON.stringify(company[0])
   })
+
   result=await result.json();
   // alert(`item added to the watchlist` )
   Swal.fire({
@@ -131,7 +157,32 @@ async function addItem() {
     showConfirmButton: true
   });
   SetWatch(false)
+}catch(error:any){
   
+    if(error.response && error.response===400){
+      Swal.fire({
+        icon: 'error',
+        title: 'Item Present ',
+        text: `Item already Present In this WatchList`,
+        // timer: 2500,
+        // timerProgressBar: true,
+        // toast: true
+        position: 'center',
+        showConfirmButton: true
+      });
+    }else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error Adding',
+        text: `Error in adding item`,
+        // timer: 2500,
+        // timerProgressBar: true,
+        // toast: true
+        position: 'center',
+        showConfirmButton: true
+      });
+    }
+} 
 }
 
   const symbolToImage: Record<string, string> = {
@@ -145,7 +196,40 @@ async function addItem() {
     {
       showPlot?
         <>
-        <div className="graph-div"></div>
+        <div className="graph-div">
+          <div className='WrongHeader' >
+      <button onClick={()=>setPlot(false)} >Close</button>
+          </div>
+
+          <div className='MainDetails' >
+            {apicompany ?
+            <div> <p>Information: {apicompany["1. Information"]}</p>
+            <p>Symbol: {apicompany["2. Symbol"]}</p>
+            <p>Last Refreshed: {apicompany["3. Last Refreshed"]}</p>
+            <p>Output Size: {apicompany["4. Output Size"]}</p>
+            <p>Time Zone: {apicompany["5. Time Zone"]}</p>
+            </div>
+             : <div>Not Found</div>}
+          </div>
+
+          <div className='Graph' >
+          <Plot
+        data={[
+          {
+            x: stockXvalues,
+            y: stockYvalues,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'red'},
+          }
+        ]}
+        layout={ {width: 700, height: 300, title: 'A Fancy Plot'} }
+      />
+          </div>
+        <div>
+
+        </div>
+        </div>
         </>:null
       
     }
@@ -294,7 +378,9 @@ async function addItem() {
               onClick={()=>{
                 setPlot(true)
                 setTimeout(() => {
-                  PlotGraph(item._id)
+              
+                  PlotGraph(item.Symbol)
+
                 }, 500);
               }}>Show</Button>
           </CardActions>

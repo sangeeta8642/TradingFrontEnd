@@ -9,10 +9,14 @@ import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import Plot from "react-plotly.js";
+
 
 import ibm from "../images/ibm.png";
 import jpm from "../images/jpm.jpg";
 import msft from "../images/msft.png";
+
+
 
 interface ItemData {
   items: StockData[];
@@ -20,15 +24,84 @@ interface ItemData {
   onRemoveItem: (symbol: string) => void;
 }
 
+interface TimeSeriesData {
+  [key: string]: {
+    '1. open': string;
+    "2. high":string;
+    "3. low":string
+    "4. close":string
+    "5. volume":string
+  };
+}
+
+interface MetaData {
+  "1. Information": string,
+  "2. Symbol": string,
+  "3. Last Refreshed": any,
+  "4. Output Size": string,
+  "5. Time Zone": string
+}
+
+const initialState: MetaData = {
+  "1. Information": "",
+  "2. Symbol": "",
+  "3. Last Refreshed": null,
+  "4. Output Size": "",
+  "5. Time Zone": ""
+};
+
 export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
   const [stock, setStock] = useState<StockData[]>([]);
   const nav = useNavigate();
+  const[showPlot,setPlot]=useState<boolean>(false)
+  const [plotData, setplotData] = useState<any>(null);
+  const [stockXvalues, setStockXValues] = useState<string[]>([]);
+  const [stockYvalues, setStockYValues] = useState<string[]>([]);
+  const [apicompany, setapicompany] = useState<MetaData>(initialState); 
 
   // useEffect(()=>{
   // getItems()
   // },[])
+
+  async function PlotGraph(symbol:String){
+    try {
+      let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
+      if (!result.ok) {
+        throw new Error('Error fetching data');
+      }
+      const responseData = await result.json();
+      console.log(responseData);
+      setplotData(responseData);
+      console.log("responseData ++++++++");
+      console.log(responseData['Meta Data']); 
+      console.log("responseData -------");
+      console.log(responseData['Time Series (Daily)']);
+      setapicompany(responseData['Meta Data'])
+
+      // Loop through the daily time series data and extract values
+      const timeSeriesData: TimeSeriesData = responseData['Time Series (Daily)'];
+      const xValues: string[] = [];
+      const yValues: string[] = [];
+      for (const key in timeSeriesData) {
+        if (Object.prototype.hasOwnProperty.call(timeSeriesData, key)) {
+          const typedKey = key as keyof TimeSeriesData;
+          xValues.push(key);
+          yValues.push(timeSeriesData[typedKey]['1. open']);
+        }
+      }
+
+      setStockXValues(xValues);
+      setStockYValues(yValues);
+
+      console.log("X values", xValues);
+      console.log("Y Values", yValues);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
 
   async function getItems() {
     try {
@@ -80,6 +153,47 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
   };
 
   return (
+    <>
+     {
+      showPlot?
+        <>
+        <div className="graph-div" style={{width:"70vw",height:"auto",backgroundColor:"#fff",position:"absolute",zIndex:"1"}}>
+          <div className='WrongHeader' >
+      <button onClick={()=>setPlot(false)} >Close</button>
+          </div>
+
+          <div className='MainDetails' >
+            {apicompany ?
+            <div> <p>Information: {apicompany["1. Information"]}</p>
+            <p>Symbol: {apicompany["2. Symbol"]}</p>
+            <p>Last Refreshed: {apicompany["3. Last Refreshed"]}</p>
+            <p>Output Size: {apicompany["4. Output Size"]}</p>
+            <p>Time Zone: {apicompany["5. Time Zone"]}</p>
+            </div>
+             : <div>Not Found</div>}
+          </div>
+
+          <div className='Graph' >
+          <Plot
+        data={[
+          {
+            x: stockXvalues,
+            y: stockYvalues,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'red'},
+          }
+        ]}
+        layout={ {width: 700, height: 300, title: 'A Fancy Plot'} }
+      />
+          </div>
+        <div>
+
+        </div>
+        </div>
+        </>:null
+      
+    }
     <div
       style={{
         display: "flex",
@@ -156,6 +270,17 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
                 </Box>
               </CardContent>
               <CardActions>
+              <Button size="medium"
+              variant="contained"
+              color="warning"
+              onClick={()=>{
+                setPlot(true)
+                setTimeout(() => {
+              
+                  PlotGraph(item.Symbol)
+
+                }, 500);
+              }}>Show</Button>
                 <Button
                   size="medium"
                   variant="contained"
@@ -172,7 +297,8 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
         </>
       ) : (
         <>
-          <h1>No Items Found</h1>
+        {
+          name!==""?<> <h1>No Items Found</h1>
           <Button
             variant="contained"
             color="warning"
@@ -181,9 +307,12 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
             }}
           >
             Add Items
-          </Button>
+          </Button></>:null
+        }
+         
         </>
       )}
     </div>
+    </>
   );
 }
