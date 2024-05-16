@@ -1,0 +1,52 @@
+.LoginPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: auto;
+}
+
+/* .login-heading h1 {
+    padding-bottom: 50px ;
+} */
+
+.LoginPage .login-heading {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    column-gap: 100px;
+    align-items: center;
+    justify-content: start;
+    /* padding-right: 50px; */
+}
+
+.LoginPage .login-heading .backArrow {
+    cursor: pointer;
+    /* padding-right: 150px; */
+}
+
+.LoginPage .login-form {
+    width: auto;
+    height: auto;
+    border-radius: 15px;
+    padding: 30px 20px;
+}
+
+.LoginPage .login-form input {
+    /* background-color: #000; */
+    font-weight: bold;
+}
+
+.LoginPage .login-form .MuiInputLabel-root {
+    font-weight: bold;
+    color: #000;
+
+
+}
+
+.LoginPage .login-form .MuiInputLabel-root:active {
+    font-weight: bold;
+    color: #000;
+    border: 1px solid #000;
+    outline: #000 1px solid;
+}

@@ -1,0 +1,40 @@
+.signuppage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 100vw;
+  height: max-content;
+  /* overflow-y: scroll; */
+  overflow-x: hidden;
+}
+
+.signuppage .signup-div {
+  width: max-content;
+  height: max-content;
+  /* border: 4px solid #000; */
+  border-radius: 15px;
+  /* background-color: rgb(168, 247, 220); */
+  padding: 30px 20px;
+}
+.signuppage .signup-div .signup-heading {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  column-gap: 230px;
+  align-items: center;
+  justify-content: start;
+}
+.signuppage .signup-div .signup-heading .backArrow{
+  cursor: pointer;
+}
+.signuppage .signup-div .signp-form {
+  display: flex;
+  flex-direction: row;
+}
+.signuppage .signup-div .signp-form .MuiInputLabel-root {
+  /* border: 2px solid #000; */
+  font-weight: bold;
+  /* color: pink; */
+}

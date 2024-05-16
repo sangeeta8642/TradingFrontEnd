@@ -1,0 +1,102 @@
+.watchlist{
+    background: linear-gradient(180deg, skyblue 5%, white, transparent);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    height: auto;
+}
+
+.watchlist .watchlist-content{
+    width: 80vw;
+    height: 80vh;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    row-gap: -5px;
+    /* justify-content: space-around; */
+}
+
+.watchlist .watchlist-content .watchlist-nav{
+    height: 50px;
+    width: max-content;
+    /* background-color: black; */
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    align-items: center;
+    
+    /* padding-left: 20px; */
+}
+
+.watchlist .watchlist-content .watchlist-cards{
+    padding-top: 30px;
+    background-color:aliceblue;
+    width: 80vw;
+    height: 80vh;
+    /* border-radius: 20px; */
+    border: none;
+
+    
+}
+
+.watchlist-nav Button{
+    background-color:aliceblue;
+    padding: 10px 14px;
+    color: #000;
+    font-size: 18px;
+    cursor: pointer;
+    border: 1px solid #000;
+}
+.Showdiv {
+    width: auto;
+    height: auto;
+    padding: 12px 16px;
+    /* color: white; */
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 30px;
+    position: absolute;
+    top: 250px;
+    z-index: 11111111111111;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    box-shadow: 1px 0px 15px 10px grey;
+}
+.Header{
+    text-align: left;
+    font-size: 22px;
+    padding: 10px 20px;
+}
+.Middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: 15px 25px;
+}
+.Middle input{
+    padding: 10px 12px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.Bottom .btn2{
+    margin: 20px 30px;
+    padding: 12px 16px;
+    color: white;
+    background-color: red;
+    cursor: pointer;
+    border: 1px solid black;
+}
+.Bottom .btn1{
+    border: 1px solid black;
+    cursor: pointer;
+    margin: 20px 30px;
+    padding: 12px 16px;
+    background-color: greenyellow;
+}
