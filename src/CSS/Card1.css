@@ -50,4 +50,5 @@ flex-direction: row;
     height: 70vh;
     background-color: #fff;
     position: absolute;
+    z-index: 1;
 }

@@ -23,6 +23,12 @@ interface watchlistinterface {
   item: any;
   _id: String;
 }
+interface TimeSeriesData {
+  [key: string]: {
+    '1. open': string;
+    // Add other properties as needed
+  };
+}
 
 interface Card1Props {
   data: StockData[]; // Use StockData[] as the type for the data prop
@@ -32,19 +38,60 @@ export default function Card1({ data,getData }: Card1Props) {
   
   const [userWatchlist, showWatchlist] = useState<watchlistinterface[]>([]);
   const [ShowWatch, SetWatch] = useState<boolean>(false);
-  const[showPlot,setPlot]=useState<boolean>(true)
+  const[showPlot,setPlot]=useState<boolean>(false)
 
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
   const nav =useNavigate()
   const [company, setCompany] = useState<StockData[]>([]);
   const[watchlistname,setwatchlistname]=useState<String>("")
-
+  const [plotData, setplotData] = useState<any>(null);
+  const [stockXvalues, setStockXValues] = useState<string[]>([]);
+  const [stockYvalues, setStockYValues] = useState<string[]>([]);
 
   React.useEffect(() => {
     getWatchlist();
   }, []);
   // console.log(userWatchlist);
+
+  async function PlotGraph(symbol:String){
+    try {
+      let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
+      result=await result.json()
+      console.log(result);
+      if (!result.ok) {
+        throw new Error('Error fetching data');
+      }
+      const responseData = await result.json();
+      setplotData(responseData);
+      console.log(responseData);
+      console.log(responseData['Meta Data']); // Check if this prints correctly
+      console.log(responseData['Time Series (Daily)']); // Check if this prints correctly
+
+      // Loop through the daily time series data and extract values
+      const timeSeriesData: TimeSeriesData = responseData['Time Series (Daily)'];
+      const xValues: string[] = [];
+      const yValues: string[] = [];
+      for (const key in timeSeriesData) {
+        if (Object.prototype.hasOwnProperty.call(timeSeriesData, key)) {
+          const typedKey = key as keyof TimeSeriesData;
+          xValues.push(key);
+          yValues.push(timeSeriesData[typedKey]['1. open']);
+        }
+      }
+
+      setStockXValues(xValues);
+      setStockYValues(yValues);
+
+      console.log("X values", xValues);
+      console.log("Y Values", yValues);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+    
+  
 
   async function getWatchlist() {
     try {
@@ -236,7 +283,7 @@ async function addItem() {
                     
                   }
                 }}
-                
+      
 
             >
               Watchlist
@@ -244,7 +291,11 @@ async function addItem() {
             <Button size="medium"
               variant="contained"
               color="warning"
-              onClick={()=>{console.log(item.Symbol);
+              onClick={()=>{
+                setPlot(true)
+                setTimeout(() => {
+                  PlotGraph(item._id)
+                }, 500);
               }}>Show</Button>
           </CardActions>
         </Card>
