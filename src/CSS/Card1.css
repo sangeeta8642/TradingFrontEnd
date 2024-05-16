@@ -44,3 +44,9 @@ flex-direction: row;
 .showWatchlist .closeBtn{
     cursor: pointer;
 }
+
+.graph-div{
+    width: 70vw;
+    height: 70vh;
+    background-color: #fff;
+}

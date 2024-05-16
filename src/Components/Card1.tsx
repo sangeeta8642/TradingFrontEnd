@@ -32,6 +32,7 @@ export default function Card1({ data,getData }: Card1Props) {
   
   const [userWatchlist, showWatchlist] = useState<watchlistinterface[]>([]);
   const [ShowWatch, SetWatch] = useState<boolean>(false);
+  const[showPlot,setPlot]=useState<boolean>(true)
 
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
@@ -94,6 +95,13 @@ async function addItem() {
 
   return (
     <>
+    {
+      showPlot?
+        <>
+        <div className="graph-div"></div>
+        </>:null
+      
+    }
       {ShowWatch ? (
         <>
           <div className="showWatchlist">
