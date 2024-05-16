@@ -140,7 +140,7 @@ export default function Login() {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("https://tradingbackend-2w6s.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
