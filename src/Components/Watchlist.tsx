@@ -38,7 +38,7 @@ export default function Watchlist() {
   async function getWatchlist() {
     try {
       const response = await fetch(
-        `http://localhost:5000/getWatchlists/${user._id}`
+        `https://tradingbackend-2w6s.onrender.com/getWatchlists/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch watchlist");
@@ -52,7 +52,7 @@ export default function Watchlist() {
 
   async function removeWatchlist() {
     try {
-      let result = await fetch(`http://localhost:5000/deleteWatchlist/${user._id}/${name}`, {
+      let result = await fetch(`https://tradingbackend-2w6s.onrender.com/deleteWatchlist/${user._id}/${name}`, {
         method: "DELETE",
         headers: {
           "content-type": "application/json"
@@ -83,7 +83,7 @@ export default function Watchlist() {
 
   async function getItems() {
     try {
-      const response = await fetch(`http://localhost:5000/getItems/${user._id}/${name}`);
+      const response = await fetch(`https://tradingbackend-2w6s.onrender.com/getItems/${user._id}/${name}`);
       if (!response.ok) {
         throw new Error('Failed to fetch watchlist');
       }
@@ -102,7 +102,7 @@ export default function Watchlist() {
       const data = { innerArrayName };
       try {
         const result = await fetch(
-          `http://localhost:5000/createInnerArray/${user._id}`,
+          `https://tradingbackend-2w6s.onrender.com/createInnerArray/${user._id}`,
           {
             method: "POST",
             headers: {
