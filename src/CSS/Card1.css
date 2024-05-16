@@ -49,4 +49,5 @@ flex-direction: row;
     width: 70vw;
     height: 70vh;
     background-color: #fff;
+    position: absolute;
 }
