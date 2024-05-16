@@ -34,7 +34,7 @@ export default function Home() {
   const handleStockChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setStock(e.target.value);
-      const response = await fetch(`http://localhost:5000/search?q=${e.target.value}`);
+      const response = await fetch(`https://tradingbackend-2w6s.onrender.com/search?q=${e.target.value}`);
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
