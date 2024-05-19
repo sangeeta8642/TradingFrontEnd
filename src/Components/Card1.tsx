@@ -77,9 +77,10 @@ export default function Card1({ data,getData }: Card1Props) {
 
   async function PlotGraph(symbol:String){
     try {
-      console.log(symbol);
+      console.log("Symbol"+symbol);
       
-      let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
+      // let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
+      let result =await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=QVG07EJHPZHIAZ0M`)
       if (!result.ok) {
         throw new Error('Error fetching data');
       }
