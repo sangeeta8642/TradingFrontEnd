@@ -75,45 +75,89 @@ export default function Card1({ data,getData }: Card1Props) {
   }, []);
   // console.log(userWatchlist);
 
-  async function PlotGraph(symbol:String){
-    try {
-      console.log("Symbol"+symbol);
+  // async function PlotGraph(symbol:String){
+  //   try {
+  //     console.log("Symbol"+symbol);
       
-      // let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
-      let result =await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=QVG07EJHPZHIAZ0M`)
-      if (!result.ok) {
-        throw new Error('Error fetching data');
-      }
-      const responseData = await result.json();
-      console.log(responseData);
-      setplotData(responseData);
-      console.log("responseData ++++++++");
-      console.log(responseData['Meta Data']); 
-      console.log("responseData -------");
-      console.log(responseData['Time Series (Daily)']);
-      setapicompany(responseData['Meta Data'])
+  //     // let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
+  //     let result =await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=QVG07EJHPZHIAZ0M`)
+  //     if (!result.ok) {
+  //       throw new Error('Error fetching data');
+  //     }
+  //     const responseData = await result.json();
+  //     console.log(responseData);
+  //     setplotData(responseData);
+  //     console.log("responseData ++++++++");
+  //     console.log(responseData['Meta Data']); 
+  //     console.log("responseData -------");
+  //     console.log(responseData['Time Series (Daily)']);
+  //     setapicompany(responseData['Meta Data'])
 
-      // Loop through the daily time series data and extract values
-      const timeSeriesData: TimeSeriesData = responseData['Time Series (Daily)'];
-      const xValues: string[] = [];
-      const yValues: string[] = [];
-      for (const key in timeSeriesData) {
-        if (Object.prototype.hasOwnProperty.call(timeSeriesData, key)) {
-          const typedKey = key as keyof TimeSeriesData;
-          xValues.push(key);
-          yValues.push(timeSeriesData[typedKey]['1. open']);
-        }
-      }
+  //     // Loop through the daily time series data and extract values
+  //     const timeSeriesData: TimeSeriesData = responseData['Time Series (Daily)'];
+  //     const xValues: string[] = [];
+  //     const yValues: string[] = [];
+  //     for (const key in timeSeriesData) {
+  //       if (Object.prototype.hasOwnProperty.call(timeSeriesData, key)) {
+  //         const typedKey = key as keyof TimeSeriesData;
+  //         xValues.push(key);
+  //         yValues.push(timeSeriesData[typedKey]['1. open']);
+  //       }
+  //     }
 
-      setStockXValues(xValues);
-      setStockYValues(yValues);
+  //     setStockXValues(xValues);
+  //     setStockYValues(yValues);
 
-      console.log("X values", xValues);
-      console.log("Y Values", yValues);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+  //     console.log("X values", xValues);
+  //     console.log("Y Values", yValues);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+
+  async function PlotGraph(symbol:String) {
+  try {
+    console.log("Symbol: " + symbol);
+    
+    let result = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=QVG07EJHPZHIAZ0M`);
+    
+    if (!result.ok) {
+      throw new Error('Error fetching data');
     }
-  };
+    
+    const responseData = await result.json();
+    console.log(responseData);
+    
+    setplotData(responseData);
+    
+    console.log("responseData ++++++++");
+    console.log(responseData['Meta Data']);
+    console.log("responseData -------");
+    console.log(responseData['Time Series (Daily)']);
+    
+    setapicompany(responseData['Meta Data']);
+    
+    // Loop through the daily time series data and extract values
+    const timeSeriesData = responseData['Time Series (Daily)'];
+    const xValues = [];
+    const yValues = [];
+    
+    for (const key in timeSeriesData) {
+      if (Object.prototype.hasOwnProperty.call(timeSeriesData, key)) {
+        xValues.push(key);
+        yValues.push(timeSeriesData[key]['1. open']);
+      }
+    }
+    
+    setStockXValues(xValues);
+    setStockYValues(yValues);
+    
+    console.log("X values:", xValues);
+    console.log("Y values:", yValues);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
 
     
   
