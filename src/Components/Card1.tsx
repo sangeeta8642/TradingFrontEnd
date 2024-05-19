@@ -77,6 +77,8 @@ export default function Card1({ data,getData }: Card1Props) {
 
   async function PlotGraph(symbol:String){
     try {
+      console.log(symbol);
+      
       let result =await fetch(`https://tradingbackend-2w6s.onrender.com/GettingStocksData/${symbol}`)
       if (!result.ok) {
         throw new Error('Error fetching data');
@@ -378,7 +380,8 @@ async function addItem() {
               onClick={()=>{
                 setPlot(true)
                 setTimeout(() => {
-              
+                  console.log("item -> Symbol");
+                  console.log(item.Symbol);                  
                   PlotGraph(item.Symbol)
 
                 }, 500);

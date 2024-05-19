@@ -276,7 +276,8 @@ export default function ShowWatchlist({ items, name, onRemoveItem }: ItemData) {
               onClick={()=>{
                 setPlot(true)
                 setTimeout(() => {
-              
+                  console.log(item.Symbol);
+                  
                   PlotGraph(item.Symbol)
 
                 }, 500);
